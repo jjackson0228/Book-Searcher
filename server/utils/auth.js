@@ -7,6 +7,12 @@ const secret = 'mysecretsshhhhh';
 const expiration = '2h';
 
 module.exports = {
+  // Helper to throw a GraphQL Authentication Error
+  AuthenticationError: new GraphQLError('Could not authenticate user.', {
+    extensions: {
+      code: 'UNAUTHENTICATED',
+    },
+  }),
   // function for our authenticated routes
   authMiddleware: function (req, res, next) {
     // allows token to be sent via  req.query or headers
@@ -38,13 +44,5 @@ module.exports = {
     const payload = { username, email, _id };
 
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
-  },
-  // Helper to throw a GraphQL Authentication Error
-  AuthenticationError: function () {
-    return new GraphQLError('Not able to authenticate user.', {
-      extensions: {
-        code: 'UNAUTHENTICATED',
-      },
-    });
   },
 };

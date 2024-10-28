@@ -6,11 +6,7 @@ const resolvers = {
     // 'me' query to return the current user's data
     me: async (parent, args, context) => {
       if (context.user) {
-        const userData = await User.findById(context.user._id)
-          .select('-__v -password')
-          .populate('savedBooks');
-
-        return userData;
+        return User.findOne({ _id: context.user._id });
       }
       throw new AuthenticationError('Not logged in');
     },
